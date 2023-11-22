@@ -36,18 +36,22 @@ Thanks and kudos to @Joe Tan (joe.tan@cyberark.com) for the detail of installing
   - Crc installation package for linux: https://console.redhat.com/openshift/create/local
   - Download pull secret and save it to file pull-secret.txt
 
- #### *The IP addresses in this document are using from current lab environment. Please replace the **172.16.100.14** by your actual **VM IP**’s
- #### *You will need to setup the DNS system or modify your hosts file to map all below domain name to the Openshift VM's IP 
-- cityapp-springboot-cityapp.apps-crc.testing 
-- cityapp-secretless-cityapp.apps-crc.testing 
-- cityapp-conjurtok8ssecret-cityapp.apps-crc.testing 
+#### *The IP addresses in this document are using from current lab environment. Please replace the **172.16.100.14** by your actual **VM IP**’s
+
+#### *You will need to setup the DNS system or modify your hosts file to map all below domain name to the Openshift VM's IP 
+
+Domain for Openshift GUI, authenticaiton
 - console-openshift-console.apps-crc.testing 
-- oauth-openshift.apps-crc.testing 
-- cityapp-hardcode-cityapp.apps-crc.testing 
-- cityapp-conjurtok8sfile-cityapp.apps-crc.testing 
-- conjur-appliance-conjur.apps-crc.testing 
+- oauth-openshift.apps-crc.testing
+Domain for Conjur GUI
 - conjur-master.demo.local
-    
+Domain for web applications
+- cityapp-hardcode-cityapp.apps-crc.testing
+- cityapp-conjurtok8sfile-cityapp.apps-crc.testing
+- cityapp-conjurtok8ssecret-cityapp.apps-crc.testing
+- cityapp-secretless-cityapp.apps-crc.testing
+- cityapp-springboot-cityapp.apps-crc.testing
+
 # 1.2. VMs Preparation
 ## **Step1.2.1: Preparing CentOS Stream 9**
 CentOS Stream 9 can be downloaded at https://www.centos.org/download/
@@ -273,16 +277,13 @@ Using command ```oc get is``` to list out container images in Openshift platform
 Login to VM as crcuser, running below command to deploy cityapp-hardcode
 ```
 /opt/lab/conjur-ocp.local-lab/3.cityapp-php
-./22.running-cityapp-hardcode.sh
+./32.running-cityapp-hardcode.sh
 ```
-
-
-
-Using browser and access to ```http://<VM-IP>:30080``` to open cityapp-hardcode webapp for the result
+Using browser and access to ```http://cityapp-hardcode-cityapp.apps-crc.testing``` to open cityapp-hardcode webapp for the result
 
 ![cityapp](./images/09.cityapp-hardcode.png)
 
-Using k8s dashboard GUI and select cityapp namespace to see more detail on cityapp-hardcode pod. This application is being run with database credentials from environment parameters.
+Using OpenShift dashboard GUI and select cityapp namespace to see more detail on cityapp-hardcode pod. This application is being run with database credentials from environment parameters.
 
 ![cityapp](./images/10.cityapp-hardcode-pod.png)
 
@@ -295,11 +296,11 @@ Application cityapp-conjurtok8sfile is configured with sidecar container (secret
 
 To deploy conjurtok8sfile application, login to VM as root, running below command
 ```
-cd /opt/lab/conjur-k8s-lab/3.cityapp-setup
-./03.running-cityapp-conjurtok8sfile.sh
+/opt/lab/conjur-ocp.local-lab/3.cityapp-php
+./33.running-cityapp-conjurtok8sfile.sh
 ```
 
-Going to k8s dashboard GUI, select cityapp namespace and open cityapp-conjurtok8sfile 's sidecar container log, the detail of authentication result will be shown as below
+Going to k8s Openshift GUI, select cityapp namespace and open cityapp-conjurtok8sfile 's sidecar container log, the detail of authentication result will be shown as below
 ```
 INFO:  2022/11/20 17:29:18.217628 main.go:62: CSPFK008I CyberArk Secrets Provider for Kubernetes v1.4.4-5f8218a starting up
 INFO:  2022/11/20 17:29:18.219453 main.go:226: CSPFK014I Authenticator setting DEBUG provided by environment
@@ -316,7 +317,7 @@ INFO:  2022/11/20 17:29:18.499934 conjur_client.go:21: CSPFK002I Creating DAP/Co
 INFO:  2022/11/20 17:29:18.560742 provide_conjur_secrets.go:126: CSPFK015I DAP/Conjur Secrets pushed to shared volume successfully
 ```
 
-Using browser and go to ```http://<VM-IP>:30081``` to see the result
+Using browser and go to ```http://cityapp-conjurtok8sfile-cityapp.apps-crc.testing``` to see the result
 ![cityapp](./images/11.cityapp-conjurtok8sfile.png)
 
 # 3.4. Running cityapp-conjurtok8ssecret
@@ -328,8 +329,8 @@ Application cityapp-conjurtok8ssecret is configured with sidecar container (secr
 
 Login to VM as root, running below command to deploy conjurtok8ssecret
 ```
-cd /opt/lab/conjur-k8s-lab/3.cityapp-setup
-./04.running-cityapp-conjurtok8ssecret.sh
+/opt/lab/conjur-ocp.local-lab/3.cityapp-php
+./34.running-cityapp-conjurtok8ssecret.sh
 ```
 
 In k8s dashboard's GUI, checking for sidecar's log in conjurtok8ssecret pod, the detail of conjur jwt authentication and secret pushing will be shown as below
@@ -353,7 +354,7 @@ INFO:  2022/11/20 17:51:05.683098 k8s_secrets_client.go:40: CSPFK006I Updating K
 INFO:  2022/11/20 17:51:05.690806 provide_conjur_secrets.go:184: CSPFK009I DAP/Conjur Secrets updated in Kubernetes successfully
 ```
 
-Using browser and go to ```http://<VM-IP>:30082``` to see the result
+Using browser and go to ```http://cityapp-conjurtok8ssecret-cityapp.apps-crc.testing``` to see the result
 ![cityapp](./images/12.cityapp-conjurtok8ssecret.png)
 
 # 3.5. Running cityapp-secretless
@@ -362,7 +363,7 @@ Application cityapp-secretless is configured with sidecar container (secretless-
 The architecture of this method is described at below CyberArk document link.
 [CyberArk Secret Provider: Secretless broker](https://docs.cyberark.com/Product-Doc/OnlineHelp/AAM-DAP/12.4/en/Content/Overview/scl_how_it_works.htm?TocPath=Fundamentals%7CSecretless%20pattern%7C_____2 "Secretless broker")
 
-![secretless](https://github.com/joetanx/conjur-k8s/blob/main/images/architectureCityappSecretless.png)
+![secretless](https://docs.cyberark.com/conjur-enterprise/12.4/en/Content/Resources/Images/secretless_architecture.svg)
 
 Login to VM as root, running below command to deploy cityapp-secretless
 ```
@@ -370,7 +371,7 @@ cd /opt/lab/conjur-k8s-lab/3.cityapp-setup
 ./05.running-cityapp-secretless.sh 
 ```
 
-In k8s dashboard's GUI, checking for sidecar's log in secretless pod, the detail of conjur jwt authentication and secret pushing will be shown as below
+In Openshift dashboard's GUI, checking for sidecar's log in secretless pod, the detail of conjur jwt authentication and secret pushing will be shown as below
 ```
 2022/11/21 01:02:02 Secretless v1.7.14-552c75c8 starting up...
 2022/11/21 01:02:02 Initializing health check on :5335...
