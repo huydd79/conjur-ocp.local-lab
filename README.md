@@ -166,7 +166,7 @@ Changed all related parameters such as IP, domain, password... and set ```READY=
 ## **Step2.2.2: Installing podman**
 Login to VM as root and running below commands
 ```
-/opt/lab/conjur-ocp.local-lab/2.conjur-setup
+cd /opt/lab/conjur-ocp.local-lab/2.conjur-setup
 ./21.installing-podman.sh
 ```
 Using ```sudo podman image ls``` to check current podman images
@@ -174,7 +174,7 @@ Using ```sudo podman image ls``` to check current podman images
 ## **Step2.2.3: Setting up mysql container and database**
 Login to VM as crcuser and running below commands
 ```
-/opt/lab/conjur-ocp.local-lab/2.conjur-setup
+cd /opt/lab/conjur-ocp.local-lab/2.conjur-setup
 ./22.running-mysql-db.sh
 ```
 Using command ```sudo podman container ls``` to make sure mysql container is up and running.
@@ -183,7 +183,7 @@ Using command ```sudo ping mysql.demo.local``` to make sure host entry has been 
 ## **Step2.2.4: Installing conjur master**
 Login to VM as crcuser and running below commands
 ```
-/opt/lab/conjur-ocp.local-lab/2.conjur-setup
+cd /opt/lab/conjur-ocp.local-lab/2.conjur-setup
 ./23.loading-conjur-images.sh
 ./24.starting-conjur-container.sh
 ```
@@ -202,7 +202,7 @@ https://conjur-master.demo.local
 ## **Step2.2.5: Installing conjur CLI**
 Login to VM as crcuser and running below commands
 ```
-/opt/lab/conjur-ocp.local-lab/2.conjur-setup
+cd /opt/lab/conjur-ocp.local-lab/2.conjur-setup
 ./25.installing-conjur-cli.sh
 ```
 
@@ -257,7 +257,7 @@ If any of above parameters is emply, please run script ```./28.loading-conjur-jw
 ## **Step3.1.1: Reviewing 00.config.sh**
 Login to VM as crcuser, edit the 00.config.sh
 ```
-/opt/lab/conjur-ocp.local-lab/3.cityapp-php
+cd /opt/lab/conjur-ocp.local-lab/3.cityapp-php
 sudo vi 00.config.sh
 ```
 Changed all related parameters such as IP, domain... and set ```READY=true``` to continue
@@ -267,17 +267,17 @@ Login to VM as crcuser, review the cityapp image detail on /opt/lab/conjur-k8s-l
 - index.php: detail code of cityapp web application
 Running below command to build cityapp image
 ```
-/opt/lab/conjur-ocp.local-lab/3.cityapp-php
+cd /opt/lab/conjur-ocp.local-lab/3.cityapp-php
 ./31.building-cityapp-image.sh
 ```
-Using command ```podman image ls | grep cityapp``` to make sure cityapp image has been build and put at localhost/cityapp
+Using command ```sudo podman image ls | grep cityapp``` to make sure cityapp image has been build and put at localhost/cityapp
 
 Using command ```oc get is``` to list out container images in Openshift platform
 
 # 3.2. Running cityapp-hardcode
 Login to VM as crcuser, running below command to deploy cityapp-hardcode
 ```
-/opt/lab/conjur-ocp.local-lab/3.cityapp-php
+cd /opt/lab/conjur-ocp.local-lab/3.cityapp-php
 ./32.running-cityapp-hardcode.sh
 ```
 Using browser and access to ```http://cityapp-hardcode-cityapp.apps-crc.testing``` to open cityapp-hardcode webapp for the result
@@ -297,7 +297,7 @@ Application cityapp-conjurtok8sfile is configured with sidecar container (secret
 
 To deploy conjurtok8sfile application, login to VM as root, running below command
 ```
-/opt/lab/conjur-ocp.local-lab/3.cityapp-php
+cd /opt/lab/conjur-ocp.local-lab/3.cityapp-php
 ./33.running-cityapp-conjurtok8sfile.sh
 ```
 
@@ -330,7 +330,7 @@ Application cityapp-conjurtok8ssecret is configured with sidecar container (secr
 
 Login to VM as root, running below command to deploy conjurtok8ssecret
 ```
-/opt/lab/conjur-ocp.local-lab/3.cityapp-php
+cd /opt/lab/conjur-ocp.local-lab/3.cityapp-php
 ./34.running-cityapp-conjurtok8ssecret.sh
 ```
 
