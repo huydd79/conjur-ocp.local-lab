@@ -368,8 +368,8 @@ The architecture of this method is described at below CyberArk document link.
 
 Login to VM as root, running below command to deploy cityapp-secretless
 ```
-cd /opt/lab/conjur-k8s-lab/3.cityapp-setup
-./05.running-cityapp-secretless.sh 
+cd /opt/lab/conjur-ocp.local-lab/3.cityapp-php
+./35.running-cityapp-secretless.sh 
 ```
 
 In Openshift dashboard's GUI, checking for sidecar's log in secretless pod, the detail of conjur jwt authentication and secret pushing will be shown as below
