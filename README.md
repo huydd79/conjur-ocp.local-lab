@@ -1,4 +1,4 @@
-# Building standalone CyberArk Conjur Enterprise and K8s LAB
+# Standalone CyberArk Conjur Enterprise and OpenShift LAB
 This project will help you to quickly build up the standalone, single VM lab environment to test conjur and openshift application integration including:
 - Redhat OpenShift running on local VM
 - CyberArk Conjur Enterprise for secrets management 
@@ -7,7 +7,7 @@ This project will help you to quickly build up the standalone, single VM lab env
 - Conjur push to kubernetes secret
 - Conjur secretless broker
 - Conjur and Java SpringBoot plugin
-- And more
+- and more
 
 All setup, installing and configuration steps are all put in sequence of scripts to make the setup process quicker and easier
 
@@ -66,31 +66,37 @@ Copy conjur appliance image file to setup_files folder
 - Redhat Openshift Crc installation package: crc-linux-amd64.tar.xz
 - Pull secret file: pull-secret.txt
 
-
-
-
-
 ## **Step1.2.3: Cloning git hub repo**
 Login to VM as root and running below command
 ```
 cd /opt/lab
-git clone https://github.com/huydd79/conjur-k8s-lab
+git clone https://github.com/huydd79/conjur-ocp.local-lab
 ```
-Installation folder contains 3 sub folders for diffirent setup
-- 1.k8s-setup: scripts to setup k8s standalone cluster environment
+Git cloning provides 4 sub folders for diffirent setup
+- 1.crc-setup: scripts to setup OpenShift Local cluster environment
 - 2.conjur-setp: scripts to install podman, mysql, conjur master containers and deploying conjur follower in k8s
-- 3.cityapp-setup: scripts to deploys different types of cityapp application
+- 3.cityapp-php: scripts to deploys different types of cityapp application using php code
+- 4.cityapp-springboot: script to deploy a sample springboot application using conjur-springboot-plugin and jwt authentication method
 
 Each folder will have ```00.config.sh``` which contains some parameters. Review file content, change all related parameters to actual value and set ```READY=true``` before doing further steps.
 
-# PART II: SETING UP CONJUR - K8S LAB
-# 2.1. Setting up K8s standalone cluster
+# PART II: SETING UP CONJUR - OPENSHIFT LAB
+# 2.1. Setting up OpenShift Local standalone cluster
 ## **Step2.1.1: Installing cri-o**
-Login to VM as root, running below command to install cri-o
+Login to VM as root, running below command to download and setup crc environment
 ```
-cd /opt/lab/conjur-k8s-lab/1.k8s-setup
-./01.installing-cri-o.sh
+cd /opt/lab/conjur-ocp.local-lab/1.crc-vm/
+./11.installing-crc.sh
 ```
+You will need to provide new password for crcuser after run above script. After script completed, double check the result by running ```crc``` command. If command is not available, run ```01.installing-crc.sh``` again and doublecheck.
+
+After this step, you MUST login to the machine using crcuser to continue the installation process. Using command ```ssh crcuser@localhost``` to get completely new login session with this user.
+#### NOTE: using su or sudo will not have a full login session and makes the installation process failed.
+
+
+
+
+
 Checking crio service after done to make sure crio is up and run
 ```
 service crio status
