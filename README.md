@@ -169,7 +169,7 @@ Login to VM as root and running below commands
 /opt/lab/conjur-ocp.local-lab/2.conjur-setup
 ./21.installing-podman.sh
 ```
-Using ```podman image ls``` to check current podman images
+Using ```sudo podman image ls``` to check current podman images
 
 ## **Step2.2.3: Setting up mysql container and database**
 Login to VM as crcuser and running below commands
@@ -177,8 +177,8 @@ Login to VM as crcuser and running below commands
 /opt/lab/conjur-ocp.local-lab/2.conjur-setup
 ./22.running-mysql-db.sh
 ```
-Using command ```podman container ls``` to make sure mysql container is up and running.
-Using command ```ping mysql.demo.local``` to make sure host entry has been added correctly
+Using command ```sudo podman container ls``` to make sure mysql container is up and running.
+Using command ```sudo ping mysql.demo.local``` to make sure host entry has been added correctly
 
 ## **Step2.2.4: Installing conjur master**
 Login to VM as crcuser and running below commands
@@ -187,15 +187,15 @@ Login to VM as crcuser and running below commands
 ./23.loading-conjur-images.sh
 ./24.starting-conjur-container.sh
 ```
-Using command ```podman image ls | grep conjur``` to make sure that image is loaded correctly
+Using command ```sudo podman image ls | grep conjur``` to make sure that image is loaded correctly
 
-Using command ```podman container ls``` to make sure that conjur container is up and running
+Using command ```sudo podman container ls``` to make sure that conjur container is up and running
 
 Using command ```curl -k https://conjur-master.demo.local/info``` to check conjur master status
 
-Using browser and put in conjur master URL ```https://<VMIP>```, login using user admin and password was set in ```00.config.sh``` file
+Using browser and put in conjur master URL, login using user admin and password was set in ```00.config.sh``` file
 ```
-https://<VM-IP>/
+https://conjur-master.demo.local
 ```
 
 ![conjurgui](./images/05.conjur-gui.png)
