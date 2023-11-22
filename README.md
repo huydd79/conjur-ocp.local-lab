@@ -194,9 +194,8 @@ Using command ```sudo podman container ls``` to make sure that conjur container 
 Using command ```curl -k https://conjur-master.demo.local/info``` to check conjur master status
 
 Using browser and put in conjur master URL, login using user admin and password was set in ```00.config.sh``` file
-```
+
 https://conjur-master.demo.local
-```
 
 ![conjurgui](./images/05.conjur-gui.png)
 
