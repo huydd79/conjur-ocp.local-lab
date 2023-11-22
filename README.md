@@ -40,11 +40,13 @@ Thanks and kudos to @Joe Tan (joe.tan@cyberark.com) for the detail of installing
 
 #### *You will need to setup the DNS system or modify your hosts file to map all below domain name to the Openshift VM's IP 
 
-Domain for Openshift GUI, authenticaiton
+Domain for Openshift GUI and authentication
 - console-openshift-console.apps-crc.testing 
 - oauth-openshift.apps-crc.testing
+
 Domain for Conjur GUI
 - conjur-master.demo.local
+
 Domain for web applications
 - cityapp-hardcode-cityapp.apps-crc.testing
 - cityapp-conjurtok8sfile-cityapp.apps-crc.testing
