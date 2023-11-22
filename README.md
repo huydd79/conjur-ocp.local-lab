@@ -317,7 +317,7 @@ INFO:  2022/11/20 17:29:18.499934 conjur_client.go:21: CSPFK002I Creating DAP/Co
 INFO:  2022/11/20 17:29:18.560742 provide_conjur_secrets.go:126: CSPFK015I DAP/Conjur Secrets pushed to shared volume successfully
 ```
 
-Using browser and go to ```http://cityapp-conjurtok8sfile-cityapp.apps-crc.testing``` to see the result
+Using browser and go to http://cityapp-conjurtok8sfile-cityapp.apps-crc.testing to see the result
 ![cityapp](./images/11.cityapp-conjurtok8sfile.png)
 
 # 3.4. Running cityapp-conjurtok8ssecret
@@ -354,7 +354,7 @@ INFO:  2022/11/20 17:51:05.683098 k8s_secrets_client.go:40: CSPFK006I Updating K
 INFO:  2022/11/20 17:51:05.690806 provide_conjur_secrets.go:184: CSPFK009I DAP/Conjur Secrets updated in Kubernetes successfully
 ```
 
-Using browser and go to ```http://cityapp-conjurtok8ssecret-cityapp.apps-crc.testing``` to see the result
+Using browser and go to http://cityapp-conjurtok8ssecret-cityapp.apps-crc.testing to see the result
 ![cityapp](./images/12.cityapp-conjurtok8ssecret.png)
 
 # 3.5. Running cityapp-secretless
@@ -386,7 +386,7 @@ In Openshift dashboard's GUI, checking for sidecar's log in secretless pod, the 
 2022/11/21 01:02:02 Registering reload signal listeners...
 ```
 
-Using browser and go to ```http://<VM-IP>:30083``` to see the result
+Using browser and go to http://cityapp-secretless-cityapp.apps-crc.testing to see the result
 ![cityapp](./images/13.cityapp-secretless.png)
 
 Now you can see the cityapp main container is accessing database at localhost, using empty username and password.
