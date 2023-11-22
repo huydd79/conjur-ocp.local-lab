@@ -36,7 +36,17 @@ Thanks and kudos to @Joe Tan (joe.tan@cyberark.com) for the detail of installing
   - Crc installation package for linux: https://console.redhat.com/openshift/create/local
   - Download pull secret and save it to file pull-secret.txt
 
- *The IP addresses in this document are using from current lab environment. Please replace the **172.16.100.14** by your actual **VM IP**’s
+ * *The IP addresses in this document are using from current lab environment. Please replace the **172.16.100.14** by your actual **VM IP**’s
+ * *You will need to setup the DNS system or modify your hosts file to map all below domain name to the Openshift VM's IP 
+- cityapp-springboot-cityapp.apps-crc.testing 
+- cityapp-secretless-cityapp.apps-crc.testing 
+- cityapp-conjurtok8ssecret-cityapp.apps-crc.testing 
+- console-openshift-console.apps-crc.testing 
+- oauth-openshift.apps-crc.testing 
+- cityapp-hardcode-cityapp.apps-crc.testing 
+- cityapp-conjurtok8sfile-cityapp.apps-crc.testing 
+- conjur-appliance-conjur.apps-crc.testing 
+- conjur-master.demo.local
     
 # 1.2. VMs Preparation
 ## **Step1.2.1: Preparing CentOS Stream 9**
@@ -82,101 +92,98 @@ Each folder will have ```00.config.sh``` which contains some parameters. Review 
 
 # PART II: SETING UP CONJUR - OPENSHIFT LAB
 # 2.1. Setting up OpenShift Local standalone cluster
-## **Step2.1.1: Installing cri-o**
+## **Step2.1.1: Preparing crc installation**
 Login to VM as root, running below command to download and setup crc environment
 ```
-cd /opt/lab/conjur-ocp.local-lab/1.crc-vm/
-./11.installing-crc.sh
+cd /opt/lab/conjur-ocp.local-lab/1.crc-setup/
+./11.crc-preparing.sh
 ```
 You will need to provide new password for crcuser after run above script. After script completed, double check the result by running ```crc``` command. If command is not available, run ```01.installing-crc.sh``` again and doublecheck.
 
-After this step, you MUST login to the machine using crcuser to continue the installation process. Using command ```ssh crcuser@localhost``` to get completely new login session with this user.
-#### NOTE: using su or sudo will not have a full login session and makes the installation process failed.
+After this step, you MUST login to the VM using crcuser to continue the installation process. Using command ```ssh crcuser@localhost``` to get completely new login session with this user.
+#### NOTE: using su or sudo will not provide a full login session and makes the installation process failed.
 
-
-
-
-
-Checking crio service after done to make sure crio is up and run
-```
-service crio status
-```
 ## **Step2.1.2: Installing kubelet kubeadm and kubectl**
-Login to VM as root, running below command to install kubelet and tools
+Login to VM as crcuser, running below command to download and install openshift
 ```
-cd /opt/lab/conjur-k8s-lab/1.k8s-setup
-./02.installing-k8s-and-tools.sh
+cd /opt/lab/conjur-ocp.local-lab/1.crc-setup/
+./12.crc-installing.sh
 ```
-## **Step2.1.3: Setting up cluster and networking**
-Login to VM as root, running below command to create stand alone cluster and configure networking
-```
-cd /opt/lab/conjur-k8s-lab/1.k8s-setup
-./03.creating-k8s-cluster.sh 
-```
-Make sure that cni0 interface is getting correct IP (in 10.244) before doing futher steps
-```
-ip address show dev cni0 | grep 10.244
-```
-Checking for the kubelet service status and cluster info
-```
-service kubelet status
-kubectl get all
-```
-## **Step2.1.4: Setting up kubernetes dashboard**
-Login to VM as root, running below command to install kubernetes dashboard web GUI
-```
-cd /opt/lab/conjur-k8s-lab/1.k8s-setup
-./04.installing-k8s-dashboard.sh
-```
-Copy the value of service account token to notepad for later usage. Checking status of k8s dashboard deployment
-```
-kubectl -n kubernetes-dashboard get pods -o wide
-```
-Open browser and login to k8s dashboard using previous copied token
-```
-https://<VMIP>:30443
-```
+This process will take few minutes (up to hours depends on Internet connection). About 17GB of data will need to be downloaded from Internet and installed to CRCVM.
 
-![k8sd1](./images/03.k8s-dashboard1.png)
+## **Step2.1.3: Starting CRC and Openshift cluster**
+Login to VM as crcuser, running below command to start Openshift local service
+```
+cd /opt/lab/conjur-ocp.local-lab/1.crc-setup/
+./13.crc-start.sh
+```
+There will have some error notification related to ssh connection or pull secret, they are normal. If the starting process got failed, try to run crc delete and crc start again.
 
-Select kube-system namespace and review some of the data in dashboard
+After the starting process completed successfully, take note of the kubeadmin and developer ‘s credentials and login urls. Checking for crc status and login to openshift cli console with below commands 
+#### (NOTE that there have an additional dot before a script path to pull result to environment)
+```
+cd /opt/lab/conjur-ocp.local-lab/1.crc-setup/
+. ./14.crc-login-admin.sh
+```
+Above script also put crc eval commands to ~/.bashrc file so that the environment setting will be loaded when login again using crcuser later
 
-![k8sd2](./images/04.k8s-dashboard2.png)
+## **Step2.1.4: Installing HAProxy service**
+Login to VM as crcuser, running below command to install HAProxy service
+```
+cd /opt/lab/conjur-ocp.local-lab/1.crc-setup/
+./15.install-haproxy.sh
+```
+HAProxy service will help to forward ports (tcp/80 and tcp/443) from VM IP to Openshift Node's local IP and do the virtual host proxying for domain conjur-master.{LAB_DOMAIN}, mapping to port 8443
 
-# 2.2. Setting up podman and conjur environment
+Open browser and check for haproxy status:
+
+http://console-openshift-console.apps-crc.testing:9000/stats
+
+![haproxy](./images/05.haproxy.png)
+
+Login to CRC Web Console
+
+<https://console-openshift-console.apps-crc.testing>
+
+![policy](./images/06.crc_gui.png)
+
+Login to Openshift GUI as kubeadmin user. The login password can be retrieved by using command ```crc console --credentials```
+
+# 2.2. Setting up podman, mysql and conjur environment
 ## **Step2.2.1: Reviewing 00.config.sh**
-Login to VM as root, edit the 00.config.sh
+Login to VM as crcuser, edit the 00.config.sh
 ```
 cd /opt/lab/conjur-k8s-lab/2.conjur-setup
-vi 00.config.sh
+sudo vi 00.config.sh
 ```
 Changed all related parameters such as IP, domain, password... and set ```READY=true``` to continue
 ## **Step2.2.2: Installing podman**
 Login to VM as root and running below commands
 ```
-cd /opt/lab/conjur-k8s-lab/2.conjur-setup
-./01.installing-podman.sh
+/opt/lab/conjur-ocp.local-lab/2.conjur-setup
+./21.installing-podman.sh
 ```
 Using ```podman image ls``` to check current podman images
+
 ## **Step2.2.3: Setting up mysql container and database**
-Login to VM as root and running below commands
+Login to VM as crcuser and running below commands
 ```
-cd /opt/lab/conjur-k8s-lab/2.conjur-setup
-./02.running-mysql-db.sh
+/opt/lab/conjur-ocp.local-lab/2.conjur-setup
+./22.running-mysql-db.sh
 ```
 Using command ```podman container ls``` to make sure mysql container is up and running.
 Using command ```ping mysql.demo.local``` to make sure host entry has been added correctly
+
 ## **Step2.2.4: Installing conjur master**
-Login to VM as root and running below commands
+Login to VM as crcuser and running below commands
 ```
-cd /opt/lab/conjur-k8s-lab/2.conjur-setup
-./03.loading-conjur-images.sh
-./04.starting-conjur-container.sh
-./05.configuring-conjur-master.sh
+/opt/lab/conjur-ocp.local-lab/2.conjur-setup
+./23.loading-conjur-images.sh
+./24.starting-conjur-container.sh
 ```
 Using command ```podman image ls | grep conjur``` to make sure that image is loaded correctly
 
-Using command ```podman container ls``` to make sure that conjur1 container is up and running
+Using command ```podman container ls``` to make sure that conjur container is up and running
 
 Using command ```curl -k https://conjur-master.demo.local/info``` to check conjur master status
 
@@ -188,23 +195,23 @@ https://<VM-IP>/
 ![conjurgui](./images/05.conjur-gui.png)
 
 ## **Step2.2.5: Installing conjur CLI**
-Login to VM as root and running below commands
+Login to VM as crcuser and running below commands
 ```
-cd /opt/lab/conjur-k8s-lab/2.conjur-setup
-./06.installing-conjur-cli.sh
+/opt/lab/conjur-ocp.local-lab/2.conjur-setup
+./25.installing-conjur-cli.sh
 ```
 
 Enter ```yes``` for ```Trust this certificate``` question and providing admin password for conjur cli configuration. 
 
-Using command ```conjur whoami``` to doublecheck the result.
+Using command ```conjur whoami``` and ```conjur list``` to doublecheck the result.
 
 ## **Step2.2.6: Loading demo data and enable conjur-k8s-jwt authentication**
-Login to VM as root and running below commands
+Login to VM as crcuser and running below commands
 ```
 cd /opt/lab/conjur-k8s-lab/2.conjur-setup
-./07.loading-demo-data.sh
-./08.enable-k8s-jwt-authenticator.sh
-./09.loading-conjur-jwt-data.sh 
+./26.loading-demo-data.sh
+./27.enable-k8s-jwt-authenticator.sh
+./28.loading-conjur-jwt-data.sh 
 ```
 Using ```curl -k https://conjur-master.demo.local/info``` to see the authenticaion options that are enabled.
 ```
@@ -233,77 +240,44 @@ Using ```curl -k https://conjur-master.demo.local/info``` to see the authenticai
 Using browser, login to conjur GUI to review the demo data and content. Make sure all authn-jwt/k8s secrets got values
 - conjur/authn-jwt/k8s/audience: jwt audience, should be ```cybrdemo``` by default.
 - conjur/authn-jwt/k8s/identity-path: jwt path for identity, should be ```jwt-apps/k8s``` by default.
-- conjur/authn-jwt/k8s/issuer: jwt issuer, should be ```https://kubernetes.default.svc.cluster.local``` by default
+- conjur/authn-jwt/k8s/issuer: jwt issuer, should be ```https://kubernetes.default.svc``` by default
 - conjur/authn-jwt/k8s/public-keys: k8s public key information, should be in json format.
 
 ![conjurgui](./images/06.conjur-data.png)
 
-If any of above parameters is emply, please run script ```./09.loading-conjur-jwt-data.sh``` again.
+If any of above parameters is emply, please run script ```./28.loading-conjur-jwt-data.sh``` again.
 
-## **Step2.2.7: Deploying conjur follower on k8s**
-Login to VM as root and running below commands
-```
-cd /opt/lab/conjur-k8s-lab/2.conjur-setup
-./10.loading-k8s-follower-configmap.sh 
-./11.deploying-follower-k8s.sh 
-```
-Login to k8s dashboard, select namespace conjur and checking for follower deployment and pod status
-
-![conjurgui](./images/07.k8s-follower-data.png)
-
-Login to conjur GUI, go to ```seting>Conjur Cluster``` to check for follower status
-![conjurgui](./images/08.conjur-follower.png)
-
-Using command ```curl -k https://<VM-IP>:30444/info``` to check for follower detai info
-```
-...
-  "authenticators": {
-    "installed": [
-      "authn",
-      "authn-azure",
-      "authn-gcp",
-      "authn-iam",
-      "authn-jwt",
-      "authn-k8s",
-      "authn-ldap",
-      "authn-oidc"
-    ],
-    "configured": [
-      "authn",
-      "authn-jwt/k8s"
-    ],
-    "enabled": [
-      "authn-jwt/k8s"
-    ]
-...
-```
-
-# PART III: TESTING CITYAPP OPTIONS
+# PART III: TESTING CITYAPP OPTIONS - PHP CODE
 # 3.1. Building cityapp image
 ## **Step3.1.1: Reviewing 00.config.sh**
-Login to VM as root, edit the 00.config.sh
+Login to VM as crcuser, edit the 00.config.sh
 ```
-cd /opt/lab/conjur-k8s-lab/3.cityapp-setup
-vi 00.config.sh
+/opt/lab/conjur-ocp.local-lab/3.cityapp-php
+sudo vi 00.config.sh
 ```
 Changed all related parameters such as IP, domain... and set ```READY=true``` to continue
 ## **Step3.1.2: Building image**
-Login to VM as root, review the cityapp image detail on /opt/lab/conjur-k8s-lab/3.cityapp-setup/build
+Login to VM as crcuser, review the cityapp image detail on /opt/lab/conjur-k8s-lab/3.cityapp-setup/build
 - Dockerfile: contain building info
 - index.php: detail code of cityapp web application
 Running below command to build cityapp image
 ```
-cd /opt/lab/conjur-k8s-lab/3.cityapp-setup
-./01.building-cityapp-image.sh
+/opt/lab/conjur-ocp.local-lab/3.cityapp-php
+./31.building-cityapp-image.sh
 ```
 Using command ```podman image ls | grep cityapp``` to make sure cityapp image has been build and put at localhost/cityapp
 
+Using command ```oc get is``` to list out container images in Openshift platform
+
 # 3.2. Running cityapp-hardcode
-Login to VM as root, running below command to deploy cityapp-hardcode
+Login to VM as crcuser, running below command to deploy cityapp-hardcode
 ```
-cd /opt/lab/conjur-k8s-lab/3.cityapp-setup
-./02.running-cityapp-hardcode.sh
+/opt/lab/conjur-ocp.local-lab/3.cityapp-php
+./22.running-cityapp-hardcode.sh
 ```
+
+
+
 Using browser and access to ```http://<VM-IP>:30080``` to open cityapp-hardcode webapp for the result
 
 ![cityapp](./images/09.cityapp-hardcode.png)
