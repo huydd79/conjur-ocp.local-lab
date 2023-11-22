@@ -145,13 +145,13 @@ Open browser and check for haproxy status:
 
 http://console-openshift-console.apps-crc.testing:9000/stats
 
-![haproxy](./images/05.haproxy.png)
+![haproxy](./images/03.haproxy.png)
 
 Login to CRC Web Console
 
 <https://console-openshift-console.apps-crc.testing>
 
-![policy](./images/06.crc_gui.png)
+![policy](./images/04.crc_gui.png)
 
 Login to Openshift GUI as kubeadmin user. The login password can be retrieved by using command ```crc console --credentials```
 
