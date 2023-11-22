@@ -420,7 +420,7 @@ Login to VM as crcuser, running below command to deploy cityapp-springboot
 cd /opt/lab/conjur-ocp.local-lab/4.cityapp-springboot
 ./42.running-cityapp-springboot.sh 
 ```
-The loading time for springboot app will be longer than previous php application. Check the container log in Openshift GUI to see springboot activities to connect to conjur and getting secrets info
+The loading time for springboot app will be longer than previous php application. Please wait for a while until all app component has been loaded before trying to access to the web app. Check the container log in Openshift GUI to see springboot activities to connect to conjur and getting secrets info
 ```
 . ____ _ __ _ _
 /\\ / ___'_ __ _ _(_)_ __ __ _ \ \ \ \
@@ -451,7 +451,7 @@ Loading class `com.mysql.jdbc.Driver'. This is deprecated. The new driver class 
 ```
 Using browser and access to http://cityapp-springboot-cityapp.apps-crc.testing/cityapp to open cityapp-sprintboot webapp for the result
 
-![cityapp](./images/24.cityapp-springboot.png)
+![cityapp](./images/14.cityapp-springboot.png)
 
 Using browser and access to http://cityapp-springboot-cityapp.apps-crc.testing/cityapp/env to check for the environment variable inside application container
 
