@@ -1,10 +1,13 @@
 # Building standalone CyberArk Conjur Enterprise and K8s LAB
-This project will help you to quickly build up the standalone, single VM lab environment to test conjur and k8s application integration including:
-- conjur follower in kubernetes 
-- k8s jwt authentication
-- conjur push to k8s file
-- conjur push to kubernetes secret
-- and other
+This project will help you to quickly build up the standalone, single VM lab environment to test conjur and openshift application integration including:
+- Redhat OpenShift running on local VM
+- CyberArk Conjur Enterprise for secrets management 
+- Conjur jwt authentication method
+- Conjur push to k8s file
+- Conjur push to kubernetes secret
+- Conjur secretless broker
+- Conjur and Java SpringBoot plugin
+- And more
 
 All setup, installing and configuration steps are all put in sequence of scripts to make the setup process quicker and easier
 
@@ -12,25 +15,28 @@ Comments and question, please send to <huy.do@cyberark.com>
 
 Thanks and kudos to @Joe Tan (joe.tan@cyberark.com) for the detail of installing and configuration guide at https://github.com/joetanx
 
-### Video on step by step setting up this LAB is at https://youtu.be/qiXBtv5R1z4
+### Video on step by step setting up this LAB is at [[https://TODO-VIDEO]]
 
 # PART I: SETING UP ENVIRONMENT
 # 1.1. LAB Prerequisites
 - ESXI server or VMWorkstation to create standalone lab VM as below:
   - 12GB RAM (minimum), recommended 16GB
-  - 2 vCore CPU
-  - 60GB HDD
+  - 4 vCore CPU
+  - 120GB HDD
   - CentOS Stream 9 base OS (Minimal Install)
-    - Hostname: k8s.demo.local
-    - LAN IP (eg 172.16.100.109/24)
-    - Internet connection to do yum updating and packages installation
+    - Hostname: ocp.demo.local
+    - LAN IP (eg 172.16.100.14/24)
+    - Internet connection to do os updating and packages installation
 - Conjur appliance images & utilities:
   - Contact CyberArk local representative for following images and tools
-    - conjur-appliance-Rls-12.7.tar.gz
-    - conjur-cli-rhel-8.tzr.gz
+    - conjur-appliance-Rls-v13.1.0.tar.gz
+    - conjur-cli-go_8.0.12_linux_386.tar.gz
   - CyberArk softwares and related tools can be downloaded at https://cyberark-customers.force.com/mplace/s/#software
+- Download Openshift Local installation package and pull secret
+  - Crc installation package for linux: https://console.redhat.com/openshift/create/local
+  - Download pull secret and save it to file pull-secret.txt
 
- *The IP addresses in this document are using from current lab environment. Please replace the **172.16.100.109** by your actual **VM IP**’s
+ *The IP addresses in this document are using from current lab environment. Please replace the **172.16.100.14** by your actual **VM IP**’s
     
 # 1.2. VMs Preparation
 ## **Step1.2.1: Preparing CentOS Stream 9**
@@ -43,9 +49,10 @@ Creating VM and installing with minimal install option
 ![minimal](./images/02.minimal-install.png)
 
 - Checking for IP, DNS and Internet connection
-- Installing git tool
+- Updating the os and installing git tool
 ```
-yum -y install git
+dnf -y update
+dnf -y install git
 ```
 ## **Step1.2.2: Copying files for setting up**
 Login to VM as root, creating folder for setup_files
@@ -54,7 +61,15 @@ mkdir -p /opt/lab/setup_files
 chmod 777 /opt/lab/setup_files
 ```
 Copy conjur appliance image file to setup_files folder
-- Conjur docker image: conjur-appliance-Rls-12.7.tar.gz
+- Conjur docker image: conjur-appliance-Rls-v13.1.0.tar.gz
+- Conjur cli tool for linux: conjur-cli-go_8.0.12_linux_386.tar.gz
+- Redhat Openshift Crc installation package: crc-linux-amd64.tar.xz
+- Pull secret file: pull-secret.txt
+
+
+
+
+
 ## **Step1.2.3: Cloning git hub repo**
 Login to VM as root and running below command
 ```
