@@ -392,6 +392,70 @@ Using browser and go to http://cityapp-secretless-cityapp.apps-crc.testing to se
 
 Now you can see the cityapp main container is accessing database at localhost, using empty username and password.
 
-# PART IV: FINAL TESTING
+# PART IV: TESTING JAVA SPRINGBOOT APP USING SPRINGBOOT-CONJUR-PLUGINS
+# 4.1. Building cityapp-springboot image
+## **Step4.1.1: Reviewing 00.config.sh**
+Login to VM as crcuser, edit the 00.config.sh
+```
+cd /opt/lab/conjur-ocp.local-lab/4.cityapp-springboot
+sudo vi 00.config.sh
+```
+Changed all related parameters such as IP, domain... and set ```READY=true``` to continue
+## **Step4.1.2: Building image**
+Login to VM as crcuser, review the cityapp image detail on /opt/lab/conjur-ocp.local-lab/4.cityapp-springboot/build
+- Dockerfile: contain building info
+- src folder: detail code of cityapp web application in java springboot
+Running below command to build cityapp image
+```
+cd /opt/lab/conjur-ocp.local-lab/4.cityapp-springboot
+./41.building-cityapp-image.sh
+```
+Using command ```sudo podman image ls | grep cityapp``` to make sure cityapp image has been build and put at localhost/cityapp
+
+Using command ```oc get is``` to list out container images in Openshift platform
+
+# 4.2. Running cityapp-springboot
+Login to VM as crcuser, running below command to deploy cityapp-springboot
+```
+cd /opt/lab/conjur-ocp.local-lab/4.cityapp-springboot
+./42.running-cityapp-springboot.sh 
+```
+The loading time for springboot app will be longer than previous php application. Check the container log in Openshift GUI to see springboot activities to connect to conjur and getting secrets info
+```
+. ____ _ __ _ _
+/\\ / ___'_ __ _ _(_)_ __ __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+\\/ ___)| |_)| | | | | || (_| | ) ) ) )
+' |____| .__|_| |_|_| |_\__, | / / / /
+=========|_|==============|___/=/_/_/_/
+:: Spring Boot :: (v2.7.14)
+2023-11-22 17:42:55.681 INFO 1 --- [ main] d.c.h.n.c.CityApp : Starting CityApp v0.0.1-SNAPSHOT using Java 17.0.2 on cityapp-springboot-7f85b66dd7-rh5hr with PID 1 (/usr/local/tomcat/webapps/cityapp-conjur-springboot-plugin-0.0.1-SNAPSHOT.war started by 1000660000 in /usr/local/tomcat)
+2023-11-22 17:42:55.703 INFO 1 --- [ main] d.c.h.n.c.CityApp : No active profile set, falling back to 1 default profile: "default"
+2023-11-22 17:43:09.501 INFO 1 --- [ main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2023-11-22 17:43:10.414 INFO 1 --- [ main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 725 ms. Found 1 JPA repository interfaces.
+2023-11-22 17:43:19.644 DEBUG 1 --- [ main] c.c.c.s.c.env.ConjurConnectionManager : Using JWT Authentication
+2023-11-22 17:43:20.973 DEBUG 1 --- [ main] c.c.c.s.c.env.ConjurConnectionManager : Connection with conjur is successful
+2023-11-22 17:43:21.938 INFO 1 --- [ main] trationDelegate$BeanPostProcessorChecker : Bean 'secretsApi' of type [com.cyberark.conjur.sdk.endpoint.SecretsApi] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2023-11-22 17:43:21.961 INFO 1 --- [ main] trationDelegate$BeanPostProcessorChecker : Bean 'conjurRetrieveSecretService' of type [com.cyberark.conjur.springboot.processor.ConjurRetrieveSecretService] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying)
+2023-11-22 17:43:21.971 INFO 1 --- [ main] .c.s.p.SpringBootConjurAutoConfiguration : Creating ConjurCloudProcessor instance
+2023-11-22 17:43:21.975 DEBUG 1 --- [ main] c.c.c.s.s.DefaultPropertySourceChain : Calling Defaultropertysource Chain
+2023-11-22 17:43:21.975 DEBUG 1 --- [ main] c.c.c.s.s.CustomPropertySourceChain : Calling CustomPropertysource Chain
+2023-11-22 17:43:23.096 INFO 1 --- [ main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 26879 ms
+2023-11-22 17:43:31.957 INFO 1 --- [ main] d.c.h.n.c.ConjurSpringDbConfig : DEMO: Got conjur variable mappings. Requesting screts from conjur...
+2023-11-22 17:43:31.958 INFO 1 --- [ main] d.c.h.n.c.ConjurSpringDbConfig : =================> DEMO: CONJUR_MAPPING_DB_HOST: var=test/host1/host; value=mysql.demo.local
+2023-11-22 17:43:31.958 INFO 1 --- [ main] d.c.h.n.c.ConjurSpringDbConfig : =================> DEMO: CONJUR_MAPPING_DB_USER: var=test/host1/host; value=cityapp
+2023-11-22 17:43:31.958 INFO 1 --- [ main] d.c.h.n.c.ConjurSpringDbConfig : =================> DEMO: CONJUR_MAPPING_DB_PASS: var=test/host1/host; value=Cyberark1
+2023-11-22 17:43:31.959 INFO 1 --- [ main] d.c.h.n.c.ConjurSpringDbConfig : =================> DEMO: UPDATED DB URL : jdbc:mysql://mysql.demo.local:3306/world
+Loading class `com.mysql.jdbc.Driver'. This is deprecated. The new driver class is `com.mysql.cj.jdbc.Driver'. The driver is automatically registered via the SPI and manual loading of the driver class is generally unnecessary.
+
+```
+Using browser and access to http://cityapp-springboot-cityapp.apps-crc.testing/cityapp to open cityapp-sprintboot webapp for the result
+
+![cityapp](./images/24.cityapp-springboot.png)
+
+Using browser and access to http://cityapp-springboot-cityapp.apps-crc.testing/cityapp/env to check for the environment variable inside application container
+
+
+# PART V: FINAL TESTING
 Login to conjur GUI, change the value of secret ```test/host1/user```, ``` test/host1/pass``` and wait for 30 seconds. Refeshing the cityapp webpages to see if the credential values can be changed
 # --- LAB END ---
