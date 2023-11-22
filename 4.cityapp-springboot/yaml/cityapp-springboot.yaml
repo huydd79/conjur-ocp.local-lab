@@ -57,7 +57,6 @@ spec:
         hostnames:
         - "mysql.{LAB_DOMAIN}"
         - "conjur-master.{LAB_DOMAIN}"
-        - "conjur-master.demo.localhttps"
       containers:
       - name: cityapp
         image: default-route-openshift-image-registry.apps-crc.testing/cityapp/cityapp-springboot
