@@ -280,7 +280,7 @@ Login to VM as crcuser, running below command to deploy cityapp-hardcode
 cd /opt/lab/conjur-ocp.local-lab/3.cityapp-php
 ./32.running-cityapp-hardcode.sh
 ```
-Using browser and access to ```http://cityapp-hardcode-cityapp.apps-crc.testing``` to open cityapp-hardcode webapp for the result
+Using browser and access to http://cityapp-hardcode-cityapp.apps-crc.testing to open cityapp-hardcode webapp for the result
 
 ![cityapp](./images/09.cityapp-hardcode.png)
 
