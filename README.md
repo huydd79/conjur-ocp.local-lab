@@ -36,8 +36,8 @@ Thanks and kudos to @Joe Tan (joe.tan@cyberark.com) for the detail of installing
   - Crc installation package for linux: https://console.redhat.com/openshift/create/local
   - Download pull secret and save it to file pull-secret.txt
 
- * *The IP addresses in this document are using from current lab environment. Please replace the **172.16.100.14** by your actual **VM IP**’s
- * *You will need to setup the DNS system or modify your hosts file to map all below domain name to the Openshift VM's IP 
+ #### *The IP addresses in this document are using from current lab environment. Please replace the **172.16.100.14** by your actual **VM IP**’s
+ #### *You will need to setup the DNS system or modify your hosts file to map all below domain name to the Openshift VM's IP 
 - cityapp-springboot-cityapp.apps-crc.testing 
 - cityapp-secretless-cityapp.apps-crc.testing 
 - cityapp-conjurtok8ssecret-cityapp.apps-crc.testing 
