@@ -15,7 +15,7 @@ Comments and question, please send to <huy.do@cyberark.com>
 
 Thanks and kudos to @Joe Tan (joe.tan@cyberark.com) for the detail of installing and configuration guide at https://github.com/joetanx
 
-### Video on step by step setting up this LAB is at [[https://TODO-VIDEO]]
+### Video on step by step setting up this LAB is at https://youtu.be/XHP-D59pvKo
 
 # PART I: SETING UP ENVIRONMENT
 # 1.1. LAB Prerequisites
