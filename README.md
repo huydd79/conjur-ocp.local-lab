@@ -216,8 +216,10 @@ Login to VM as crcuser and running below commands
 cd /opt/lab/conjur-k8s-lab/2.conjur-setup
 ./26.loading-demo-data.sh
 ./27.enable-k8s-jwt-authenticator.sh
-./28.loading-conjur-jwt-data.sh 
 ```
+
+Double check that conjur service has been up and running with authn-jwt before continue to load jwt data
+
 Using ```curl -k https://conjur-master.demo.local/info``` to see the authenticaion options that are enabled.
 ```
 ...
@@ -240,6 +242,11 @@ Using ```curl -k https://conjur-master.demo.local/info``` to see the authenticai
       "authn",
       "authn-jwt/k8s"
 ...    
+```
+Load the jwt authentication data to conjur using following script:
+```
+cd /opt/lab/conjur-k8s-lab/2.conjur-setup
+./28.loading-conjur-jwt-data.sh 
 ```
 
 Using browser, login to conjur GUI to review the demo data and content. Make sure all authn-jwt/k8s secrets got values
