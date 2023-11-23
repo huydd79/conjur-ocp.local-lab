@@ -1,4 +1,5 @@
 # Standalone CyberArk Conjur Enterprise and OpenShift LAB
+![lab](./images/00.lab.png)
 This project will help you to quickly build up the standalone, single VM lab environment to test conjur and openshift application integration including:
 - Redhat OpenShift running on local VM
 - CyberArk Conjur Enterprise for secrets management 
