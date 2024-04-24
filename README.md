@@ -105,7 +105,7 @@ Login to VM as root, running below command to download and setup crc environment
 cd /opt/lab/conjur-ocp.local-lab/1.crc-setup/
 ./11.crc-preparing.sh
 ```
-You will need to provide new password for crcuser after run above script. After script completed, double check the result by running ```crc``` command. If command is not available, run ```01.installing-crc.sh``` again and doublecheck.
+You will need to provide new password for crcuser after run above script. After script completed, double check the result by running ```crc``` command. If command is not available, run ```11.crc-preparing.sh``` again and doublecheck.
 
 After this step, you MUST login to the VM using crcuser to continue the installation process. Using command ```ssh crcuser@localhost``` to get completely new login session with this user.
 #### NOTE: using su or sudo will not provide a full login session and makes the installation process failed.
