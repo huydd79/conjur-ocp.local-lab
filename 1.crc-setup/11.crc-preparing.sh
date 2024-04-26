@@ -18,6 +18,6 @@ useradd crcuser
 passwd  crcuser
 usermod -aG wheel crcuser
 
-echo "fe using ssh crcuser@localhost to login and continue next steps"
+echo "please using ssh crcuser@localhost to login and continue next steps"
 
 set +x
