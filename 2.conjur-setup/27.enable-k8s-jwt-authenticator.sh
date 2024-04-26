@@ -15,7 +15,8 @@ fi
 set -x
 conjur -d policy load -f ./policies/authn-jwt-k8s.yaml -b root
 
-sudo podman exec $node_name chpst -u conjur conjur-plugin-service possum rake authn_k8s:ca_init["conjur/authn-jwt/k8s"]
+#Below command is for cert-based auth to init ca cert/key pair for conjur CA. No need in case of using jwt
+#sudo podman exec $node_name chpst -u conjur conjur-plugin-service possum rake authn_k8s:ca_init["conjur/authn-jwt/k8s"]
 sudo podman exec -it $node_name sh -c 'grep -q "authn,authn-jwt/k8s" /opt/conjur/etc/conjur.conf || echo "CONJUR_AUTHENTICATORS=\"authn,authn-jwt/k8s\"\n">>/opt/conjur/etc/conjur.conf'
 sudo podman exec $node_name sv restart conjur
 set +x
