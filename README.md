@@ -22,7 +22,7 @@ Thanks and kudos to @Joe Tan (joe.tan@cyberark.com) for the detail of installing
 # 1.1. LAB Prerequisites
 - ESXI server or VMWorkstation to create standalone lab VM as below:
   - 12GB RAM (minimum), recommended 16GB
-  - 4 vCore CPUs. ```diff Need to enable virtualize CPU```
+  - 4 vCore CPUs. $${\color{red}Red}$$ Need to enable virtualize CPU
   - 120GB HDD
   - CentOS Stream 9 base OS (Minimal Install)
     - Hostname: ocp.demo.local
