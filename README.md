@@ -160,7 +160,7 @@ Login to Openshift GUI as kubeadmin user. The login password can be retrieved by
 ## **Step2.2.1: Reviewing 00.config.sh**
 Login to VM as crcuser, edit the 00.config.sh
 ```
-cd /opt/lab/conjur-k8s-lab/2.conjur-setup
+cd /opt/lab/conjur-ocp.local-lab/2.conjur-setup
 sudo vi 00.config.sh
 ```
 Changed all related parameters such as IP, domain, password... and set ```READY=true``` to continue
@@ -214,7 +214,7 @@ Using command ```conjur whoami``` and ```conjur list``` to doublecheck the resul
 ## **Step2.2.6: Loading demo data and enable conjur-k8s-jwt authentication**
 Login to VM as crcuser and running below commands
 ```
-cd /opt/lab/conjur-k8s-lab/2.conjur-setup
+cd /opt/lab/conjur-ocp.local-lab/2.conjur-setup
 ./26.loading-demo-data.sh
 ./27.enable-k8s-jwt-authenticator.sh
 ```
@@ -246,7 +246,7 @@ Using ```curl -k https://conjur-master.demo.local/info``` to see the authenticai
 ```
 Load the jwt authentication data to conjur using following script:
 ```
-cd /opt/lab/conjur-k8s-lab/2.conjur-setup
+cd /opt/lab/conjur-ocp.local-lab/2.conjur-setup
 ./28.loading-conjur-jwt-data.sh 
 ```
 
