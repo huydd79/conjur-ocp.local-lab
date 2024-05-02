@@ -47,7 +47,7 @@ public class ConjurSpringDbConfig extends DataSourceProperties {
 			logger.info("DEMO: Got conjur variable mappings. Requesting screts from conjur... ");
 			logger.info("=================> DEMO: CONJUR_MAPPING_DB_HOST: var=" + dbhost_var + "; value=" + dbhost);
 			logger.info("=================> DEMO: CONJUR_MAPPING_DB_USER: var=" + dbhost_var + "; value=" + dbuser);
-        	logger.info("=================> DEMO: CONJUR_MAPPING_DB_PASS: var=" + dbhost_var + "; value=" + dbpass);
+        		logger.info("=================> DEMO: CONJUR_MAPPING_DB_PASS: var=" + dbhost_var + "; value=" + dbpass);
 			logger.info("=================> DEMO: UPDATED DB URL     : " + dburl);
 
 			this.setUrl(dburl);
