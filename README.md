@@ -1,4 +1,4 @@
-# Standalone CyberArk Conjur Enterprise and OpenShift LAB
+![image](https://github.com/huydd79/conjur-ocp.local-lab/assets/86530496/e6924b36-fbff-4875-9ded-477fb3fef08c)# Standalone CyberArk Conjur Enterprise and OpenShift LAB
 ![lab](./images/00.lab.png)
 This project will help you to quickly build up the standalone, single VM lab environment to test conjur and openshift application integration including:
 - Redhat OpenShift running on local VM
@@ -301,7 +301,7 @@ Application cityapp-conjurtok8sfile is configured with sidecar container (secret
 
 [CyberArk Secret Provider: Push to File mode](https://docs.cyberark.com/Product-Doc/OnlineHelp/AAM-DAP/Latest/en/Content/Integrations/k8s-ocp/cjr-k8s-secrets-provider-ic-p2f.htm?TocPath=Integrations%7COpenShift%2FKubernetes%7CSet%20up%20applications%7CSecrets%20Provider%20for%20Kubernetes%7CInit%20container%7C_____2 "Push to file")
 
-![push2file](https://docs.cyberark.com/conjur-enterprise/12.7/en/Content/Images/Integrations/k8s-ocp/cjr-sp-sidecar-p2f.png)
+![push2file](https://github.com/cyberark/secrets-provider-for-k8s/raw/main/assets/how-push-to-file-works.png)
 
 To deploy conjurtok8sfile application, login to VM as root, running below command
 ```
