@@ -13,6 +13,6 @@ if [[ "$(whoami)" == "root" ]]; then
 fi
 
 set -x
-crc start -p $UPLOAD_DIR/$pull_secret_file --log-level debug
+crc start -p $UPLOAD_DIR/$pull_secret_file --disk-size 60 --log-level debug
 
 set +x
