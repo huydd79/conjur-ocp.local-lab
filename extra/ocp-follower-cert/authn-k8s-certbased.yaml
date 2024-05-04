@@ -1,0 +1,56 @@
+- !group
+    id: admins
+
+# Define authn-k8s authenticator
+- !policy
+  id: conjur/authn-k8s/ocp
+  owner: !group admins
+  body:
+  - !variable kubernetes/service-account-token
+  - !variable kubernetes/ca-cert
+  - !variable kubernetes/api-url
+  - !variable ca/key
+  - !variable ca/cert
+
+  - !webservice
+
+  - !group consumers
+  - !permit
+    role: !group consumers
+    privilege: [ read, authenticate ]
+    resource: !webservice
+
+  - !webservice status
+  - !group operators
+  - !permit
+    role: !group operators
+    privilege: [ read ]
+    resource: !webservice status
+
+# Define hosts to be allowed for authentication
+- !host
+  id: k8s-follower
+  annotations:
+    authn-k8s/namespace: conjur
+    authn-k8s/service-account: follower
+    openshift: true
+   
+# Register the Seed Service (if not available)
+- !policy
+  id: conjur/seed-generation
+  body:
+  - !webservice
+
+  - !layer consumers
+  - !permit
+    role: !layer consumers
+    privilege: [ "execute" ]
+    resource: !webservice
+
+# Give followers permission to consume seeds and authenticator
+- !grant
+  roles:
+  - !group conjur/authn-k8s/ocp/consumers
+  - !group conjur/seed-generation/consumers
+  members:
+  - !host k8s-follower
