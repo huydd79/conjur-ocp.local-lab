@@ -11,8 +11,8 @@ LAB_CONJUR_ADMIN_PW=ChangeMe123!
 LAB_CONJUR_ACCOUNT=DEMO
 #Path to folder with all docker images
 UPLOAD_DIR=/opt/lab/setup_files
-conjur_appliance_file=conjur-appliance-Rls-v13.1.0.tar.gz
+conjur_appliance_file=conjur-appliance-Rls-v13.2.0.tar.gz
 conjur_cli_file=conjur-cli-go_8.0.12_linux_386.tar.gz
-conjur_version=13.1.0
+conjur_version=13.2.2
 
 
