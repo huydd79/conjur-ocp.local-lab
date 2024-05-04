@@ -16,7 +16,7 @@ CONJUR_CERT="$(openssl s_client -showcerts -connect  conjur-master.$LAB_DOMAIN:4
 CONJUR_AUTHN_URL=$CONJUR_URL/authn-jwt/k8s
 eval $(crc oc-env)
 set -x
-oc get namespace | grep -q cityapp || occreate namespace cityapp
+oc get namespace | grep -q cityapp || oc create namespace cityapp
 #Reset config map
 oc -n cityapp get configmap | grep -q apps-springboot-cm && oc -n cityapp delete configmap apps-springboot-cm
 oc -n cityapp create configmap apps-springboot-cm \
