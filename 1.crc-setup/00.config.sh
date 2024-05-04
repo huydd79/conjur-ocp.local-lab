@@ -13,7 +13,7 @@ LAB_CONJUR_ACCOUNT=DEMO
 UPLOAD_DIR=/opt/lab/setup_files
 crc_zip_file=crc-linux-amd64.tar.xz
 pull_secret_file=pull-secret.txt
-conjur_appliance_file=conjur-appliance-Rls-v13.1.0.tar.gz
+conjur_appliance_file=conjur-appliance-Rls-v13.2.0.tar.gz
 conjur_cli_file=conjur-cli-go_8.0.12_linux_386.tar.gz
 
 
