@@ -21,7 +21,7 @@ Thanks and kudos to @Joe Tan (joe.tan@cyberark.com) for the detail of installing
 # PART I: SETING UP ENVIRONMENT
 # 1.1. LAB Prerequisites
 - ESXI server or VMWorkstation to create standalone lab VM as below:
-  - 12GB RAM (minimum), recommended 16GB
+  - 16GB RAM (minimum), recommended 32GB
   - 4 vCore CPUs. ***Need to enable virtualize CPU in VM Configuration.***
   - 120GB HDD
   - CentOS Stream 9 base OS (Minimal Install)
