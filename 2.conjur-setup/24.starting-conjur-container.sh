@@ -24,6 +24,7 @@ sudo podman run --name $node_name \
   -d --restart=always \
   --dns $CONJUR_IP \
   -p "8443:443" \
+  -p ""5432:5432" \
   --security-opt seccomp:unconfined \
   -v $log_dir:/var/log/conjur/:Z \
   --log-driver json-file \
